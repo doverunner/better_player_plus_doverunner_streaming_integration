@@ -33,22 +33,26 @@ class _DrmPageState extends State<DrmPage> {
     _widevineController = BetterPlayerController(betterPlayerConfiguration);
     BetterPlayerDataSource _widevineDataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      Constants.widevineVideoUrl,
+      Constants.DRMDashContents,
       drmConfiguration: BetterPlayerDrmConfiguration(
           drmType: BetterPlayerDrmType.widevine,
           licenseUrl: Constants.widevineLicenseUrl,
-          headers: {"Test": "Test2"}),
+          headers: {"pallycon-customdata-v2": Constants.DRMDashAuthData}),
     );
     _widevineController.setupDataSource(_widevineDataSource);
 
     _fairplayController = BetterPlayerController(betterPlayerConfiguration);
     BetterPlayerDataSource _fairplayDataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      Constants.fairplayHlsUrl,
+      Constants.DRMHlsContents,
       drmConfiguration: BetterPlayerDrmConfiguration(
         drmType: BetterPlayerDrmType.fairplay,
-        certificateUrl: Constants.fairplayCertificateUrl,
-        licenseUrl: Constants.fairplayLicenseUrl,
+        certificateUrl: Constants.DRMCertUrl,
+        licenseUrl: Constants.DRMLicenseUrl,
+        headers: {
+          "pallycon-customdata-v2": Constants.DRMHlsAuthData,
+          "siteId": Constants.DRMSiteId
+        },
       ),
     );
     _fairplayController.setupDataSource(_fairplayDataSource);
@@ -69,19 +73,7 @@ class _DrmPageState extends State<DrmPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "Auth token based DRM.",
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: BetterPlayer(controller: _tokenController),
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                "Widevine - license url based DRM. Works only for Android.",
+                "Doverunner Widevine - Works only for Android.",
                 style: TextStyle(fontSize: 16),
               ),
             ),
@@ -93,7 +85,7 @@ class _DrmPageState extends State<DrmPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "Fairplay - certificate url based EZDRM. Works only for iOS.",
+                "Doverunner FairPlay - Works only for iOS",
                 style: TextStyle(fontSize: 16),
               ),
             ),
