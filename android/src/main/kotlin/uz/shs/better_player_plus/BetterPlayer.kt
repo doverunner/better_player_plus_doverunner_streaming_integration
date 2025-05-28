@@ -74,6 +74,7 @@ import java.lang.IllegalStateException
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.text.get
 
 internal class BetterPlayer(
     context: Context,
@@ -392,7 +393,15 @@ internal class BetterPlayer(
             if (lastPathSegment == null) {
                 lastPathSegment = ""
             }
-            type = Util.inferContentTypeForExtension(lastPathSegment)
+
+            val dotIndex = lastPathSegment.lastIndexOf('.')
+            val fileExtension = if (dotIndex > 0 && dotIndex < lastPathSegment.length - 1) {
+                lastPathSegment.substring(dotIndex + 1).lowercase()
+            } else {
+                ""
+            }
+
+            type = Util.inferContentTypeForExtension(fileExtension)
         } else {
             type = when (formatHint) {
                 FORMAT_SS -> C.CONTENT_TYPE_SS

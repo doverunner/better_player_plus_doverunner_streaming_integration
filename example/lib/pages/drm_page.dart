@@ -36,7 +36,7 @@ class _DrmPageState extends State<DrmPage> {
       Constants.DRMDashContents,
       drmConfiguration: BetterPlayerDrmConfiguration(
           drmType: BetterPlayerDrmType.widevine,
-          licenseUrl: Constants.widevineLicenseUrl,
+          licenseUrl: Constants.DRMLicenseUrl,
           headers: {"pallycon-customdata-v2": Constants.DRMDashAuthData}),
     );
     _widevineController.setupDataSource(_widevineDataSource);
