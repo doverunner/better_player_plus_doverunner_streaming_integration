@@ -33,16 +33,15 @@ class _DrmPageState extends State<DrmPage> {
     _tokenController.setupDataSource(tokenDataSource);
 
     _widevineController = BetterPlayerController(betterPlayerConfiguration);
-    final BetterPlayerDataSource widevineDataSource = BetterPlayerDataSource(
+    BetterPlayerDataSource _widevineDataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      Constants.widevineVideoUrl,
+      Constants.DRMDashContents,
       drmConfiguration: BetterPlayerDrmConfiguration(
-        drmType: BetterPlayerDrmType.widevine,
-        licenseUrl: Constants.widevineLicenseUrl,
-        headers: {'Test': 'Test2'},
-      ),
+          drmType: BetterPlayerDrmType.widevine,
+          licenseUrl: Constants.DRMLicenseUrl,
+          headers: {"pallycon-customdata-v2": Constants.DRMDashAuthData}),
     );
-    _widevineController.setupDataSource(widevineDataSource);
+    _widevineController.setupDataSource(_widevineDataSource);
 
     _fairplayController = BetterPlayerController(betterPlayerConfiguration);
     final BetterPlayerDataSource fairplayDataSource = BetterPlayerDataSource(

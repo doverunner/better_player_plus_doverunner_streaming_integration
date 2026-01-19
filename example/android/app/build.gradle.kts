@@ -41,6 +41,14 @@ android {
         jniLibs {
             useLegacyPackaging = true
         }
+
+        resources {
+            pickFirsts += setOf(
+                "lib/arm64-v8a/libflutter.so",
+                "lib/armeabi-v7a/libflutter.so",
+                "lib/x86_64/libflutter.so"
+            )
+        }
     }
 }
 
