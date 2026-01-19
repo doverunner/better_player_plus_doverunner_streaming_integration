@@ -1,16 +1,8 @@
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 
+@immutable
 class SchemeData {
-  SchemeData({
-//    @required this.uuid,
-    this.licenseServerUrl,
-    required this.mimeType,
-    this.data,
-    this.requiresSecureDecryption,
-  });
-
-//  /// The uuid of the DRM scheme, or null if the data is universal (i.e. applies to all schemes).
-//  final String uuid;
+  const SchemeData({this.licenseServerUrl, required this.mimeType, this.data, this.requiresSecureDecryption});
 
   /// The URL of the server to which license requests should be made. May be null if unknown.
   final String? licenseServerUrl;
@@ -26,19 +18,17 @@ class SchemeData {
   final bool? requiresSecureDecryption;
 
   SchemeData copyWithData(Uint8List? data) => SchemeData(
-//        uuid: uuid,
-        licenseServerUrl: licenseServerUrl,
-        mimeType: mimeType,
-        data: data,
-        requiresSecureDecryption: requiresSecureDecryption,
-      );
+    licenseServerUrl: licenseServerUrl,
+    mimeType: mimeType,
+    data: data,
+    requiresSecureDecryption: requiresSecureDecryption,
+  );
 
   @override
   bool operator ==(Object other) {
     if (other is SchemeData) {
       return other.mimeType == mimeType &&
           other.licenseServerUrl == licenseServerUrl &&
-//          other.uuid == uuid &&
           other.requiresSecureDecryption == requiresSecureDecryption &&
           other.data == data;
     }
@@ -47,10 +37,5 @@ class SchemeData {
   }
 
   @override
-  int get hashCode => Object.hash(
-      /*uuid, */
-      licenseServerUrl,
-      mimeType,
-      data,
-      requiresSecureDecryption);
+  int get hashCode => Object.hash(licenseServerUrl, mimeType, data, requiresSecureDecryption);
 }

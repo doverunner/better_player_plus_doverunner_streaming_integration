@@ -77,3 +77,4 @@ build/
 /example/ios/Podfile.lock
 pubspec.lock
 media/
+doc/

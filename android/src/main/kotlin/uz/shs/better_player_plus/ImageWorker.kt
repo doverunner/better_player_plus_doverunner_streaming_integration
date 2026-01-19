@@ -3,8 +3,8 @@ package uz.shs.better_player_plus
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.util.Log
+import androidx.media3.common.util.UnstableApi
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import androidx.work.Worker
@@ -13,7 +13,9 @@ import java.io.InputStream
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
+import androidx.core.net.toUri
 
+@UnstableApi
 class ImageWorker(
     context: Context,
     params: WorkerParameters
@@ -22,7 +24,7 @@ class ImageWorker(
         return try {
             val imageUrl = inputData.getString(BetterPlayerPlugin.URL_PARAMETER)
                 ?: return Result.failure()
-            val bitmap: Bitmap? = if (DataSourceUtils.isHTTP(Uri.parse(imageUrl))) {
+            val bitmap: Bitmap? = if (DataSourceUtils.isHTTP(imageUrl.toUri())) {
                 getBitmapFromExternalURL(imageUrl)
             } else {
                 getBitmapFromInternalURL(imageUrl)
@@ -60,13 +62,13 @@ class ImageWorker(
             )
             options.inJustDecodeBounds = false
             BitmapFactory.decodeStream(inputStream, null, options)
-        } catch (exception: Exception) {
+        } catch (_: Exception) {
             Log.e(TAG, "Failed to get bitmap from external url: $src")
             null
         } finally {
             try {
                 inputStream?.close()
-            } catch (exception: Exception) {
+            } catch (_: Exception) {
                 Log.e(TAG, "Failed to close bitmap input stream/")
             }
         }
@@ -101,7 +103,7 @@ class ImageWorker(
             )
             options.inJustDecodeBounds = false
             BitmapFactory.decodeFile(src)
-        } catch (exception: Exception) {
+        } catch (_: Exception) {
             Log.e(TAG, "Failed to get bitmap from internal url: $src")
             null
         }

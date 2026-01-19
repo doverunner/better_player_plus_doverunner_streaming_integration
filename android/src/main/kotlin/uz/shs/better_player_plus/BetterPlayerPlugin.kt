@@ -13,6 +13,8 @@ import android.os.Looper
 import android.util.Log
 import android.util.LongSparseArray
 import android.util.Rational
+import androidx.annotation.OptIn
+import androidx.media3.common.util.UnstableApi
 import uz.shs.better_player_plus.BetterPlayerCache.releaseCache
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -27,10 +29,12 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.view.TextureRegistry
 import java.lang.Exception
 import java.util.HashMap
+import androidx.core.util.size
 
 /**
  * Android platform implementation of the VideoPlayerPlugin.
  */
+@OptIn(UnstableApi::class)
 class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     private val videoPlayers = LongSparseArray<BetterPlayer>()
     private val dataSources = LongSparseArray<Map<String, Any?>>()
@@ -64,6 +68,7 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     }
 
 
+    @OptIn(UnstableApi::class)
     override fun onDetachedFromEngine(binding: FlutterPluginBinding) {
         if (flutterState == null) {
             Log.wtf(TAG, "Detached from the engine before registering to it.")
@@ -84,14 +89,16 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
 
     override fun onDetachedFromActivity() {}
 
+    @UnstableApi
     private fun disposeAllPlayers() {
-        for (i in 0 until videoPlayers.size()) {
+        for (i in 0 until videoPlayers.size) {
             videoPlayers.valueAt(i).dispose()
         }
         videoPlayers.clear()
         dataSources.clear()
     }
 
+    @UnstableApi
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         if (flutterState == null || flutterState?.textureRegistry == null) {
             result.error("no_activity", "better_player plugin requires a foreground activity", null)
@@ -150,6 +157,7 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         }
     }
 
+    @OptIn(UnstableApi::class)
     private fun onMethodCall(
         call: MethodCall,
         result: MethodChannel.Result,
@@ -249,6 +257,7 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         }
     }
 
+    @OptIn(UnstableApi::class)
     private fun setDataSource(
         call: MethodCall,
         result: MethodChannel.Result,
@@ -324,6 +333,7 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
      * @param call   - invoked method data
      * @param result - result which should be updated
      */
+    @OptIn(UnstableApi::class)
     private fun preCache(call: MethodCall, result: MethodChannel.Result) {
         val dataSource = call.argument<Map<String, Any?>>(DATA_SOURCE_PARAMETER)
         if (dataSource != null) {
@@ -359,17 +369,20 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
      * @param call   - invoked method data
      * @param result - result which should be updated
      */
+    @UnstableApi
     private fun stopPreCache(call: MethodCall, result: MethodChannel.Result) {
         val url = call.argument<String>(URL_PARAMETER)
         BetterPlayer.stopPreCache(flutterState?.applicationContext, url, result)
     }
 
+    @UnstableApi
     private fun clearCache(result: MethodChannel.Result) {
         BetterPlayer.clearCache(flutterState?.applicationContext, result)
     }
 
+    @OptIn(UnstableApi::class)
     private fun getTextureId(betterPlayer: BetterPlayer): Long? {
-        for (index in 0 until videoPlayers.size()) {
+        for (index in 0 until videoPlayers.size) {
             if (betterPlayer === videoPlayers.valueAt(index)) {
                 return videoPlayers.keyAt(index)
             }
@@ -377,6 +390,7 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         return null
     }
 
+    @OptIn(UnstableApi::class)
     private fun setupNotification(betterPlayer: BetterPlayer) {
         try {
             val textureId = getTextureId(betterPlayer)
@@ -409,8 +423,9 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         }
     }
 
+    @OptIn(UnstableApi::class)
     private fun removeOtherNotificationListeners() {
-        for (index in 0 until videoPlayers.size()) {
+        for (index in 0 until videoPlayers.size) {
             videoPlayers.valueAt(index).disposeRemoteNotifications()
         }
     }
@@ -451,19 +466,17 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     }
 
     private fun startPictureInPictureListenerTimer(player: BetterPlayer) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            pipHandler = Handler(Looper.getMainLooper())
-            pipRunnable = Runnable {
-                if (activity!!.isInPictureInPictureMode) {
-                    pipHandler!!.postDelayed(pipRunnable!!, 100)
-                } else {
-                    player.onPictureInPictureStatusChanged(false)
-                    player.disposeMediaSession()
-                    stopPipHandler()
-                }
+        pipHandler = Handler(Looper.getMainLooper())
+        pipRunnable = Runnable {
+            if (activity!!.isInPictureInPictureMode) {
+                pipHandler!!.postDelayed(pipRunnable!!, 100)
+            } else {
+                player.onPictureInPictureStatusChanged(false)
+                player.disposeMediaSession()
+                stopPipHandler()
             }
-            pipHandler!!.post(pipRunnable!!)
         }
+        pipHandler!!.post(pipRunnable!!)
     }
 
     private fun dispose(player: BetterPlayer, textureId: Long) {

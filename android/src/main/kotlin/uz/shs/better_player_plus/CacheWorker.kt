@@ -1,8 +1,8 @@
 package uz.shs.better_player_plus
 
 import android.content.Context
-import android.net.Uri
 import android.util.Log
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.HttpDataSource
 import androidx.media3.datasource.cache.CacheWriter
@@ -13,11 +13,13 @@ import androidx.work.WorkerParameters
 import androidx.work.Worker
 import java.lang.Exception
 import java.util.*
+import androidx.core.net.toUri
 
 /**
  * Cache worker which download part of video and save in cache for future usage. The cache job
  * will be executed in work manager.
  */
+@UnstableApi
 class CacheWorker(
     private val context: Context,
     params: WorkerParameters
@@ -40,8 +42,8 @@ class CacheWorker(
                     headers[keySplit] = Objects.requireNonNull(data.keyValueMap[key]) as String
                 }
             }
-            val uri = Uri.parse(url)
-            if (isHTTP(uri)) {
+            val uri = url?.toUri()
+            if (uri != null && isHTTP(uri)) {
                 val userAgent = getUserAgent(headers)
                 val dataSourceFactory = getDataSourceFactory(userAgent, headers)
                 var dataSpec = DataSpec(uri, 0, preCacheSize)

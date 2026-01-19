@@ -1,6 +1,6 @@
-import 'drm_init_data.dart';
-import 'metadata.dart';
-import 'util.dart';
+import 'package:better_player_plus/src/hls/hls_parser/drm_init_data.dart';
+import 'package:better_player_plus/src/hls/hls_parser/metadata.dart';
+import 'package:better_player_plus/src/hls/hls_parser/util.dart';
 
 /// Representation of a media format.
 class Format {
@@ -40,22 +40,21 @@ class Format {
     int selectionFlags = Util.selectionFlagDefault,
     int? roleFlags,
     bool? isDefault,
-  }) =>
-      Format(
-        id: id,
-        label: label,
-        selectionFlags: selectionFlags,
-        bitrate: bitrate,
-        averageBitrate: averageBitrate,
-        codecs: codecs,
-        containerMimeType: containerMimeType,
-        sampleMimeType: sampleMimeType,
-        width: width,
-        height: height,
-        frameRate: frameRate,
-        roleFlags: roleFlags,
-        isDefault: isDefault,
-      );
+  }) => Format(
+    id: id,
+    label: label,
+    selectionFlags: selectionFlags,
+    bitrate: bitrate,
+    averageBitrate: averageBitrate,
+    codecs: codecs,
+    containerMimeType: containerMimeType,
+    sampleMimeType: sampleMimeType,
+    width: width,
+    height: height,
+    frameRate: frameRate,
+    roleFlags: roleFlags,
+    isDefault: isDefault,
+  );
 
   /// An identifier for the format, or null if unknown or not applicable.
   final String? id;
@@ -92,7 +91,6 @@ class Format {
   ///DRM initialization data if the stream is protected, or null otherwise.
   final DrmInitData? drmInitData;
 
-  //todo ここ追加で検討
   /// For samples that contain subsamples, this is an offset that should be added to subsample timestamps.
   /// A value of {@link #OFFSET_SAMPLE_RELATIVE} indicates that subsample timestamps are relative to the timestamps of their parent samples.
   final int? subsampleOffsetUs;
@@ -119,23 +117,23 @@ class Format {
   final bool? isDefault;
 
   Format copyWithMetadata(Metadata metadata) => Format(
-        id: id,
-        label: label,
-        selectionFlags: selectionFlags,
-        roleFlags: roleFlags,
-        bitrate: bitrate,
-        averageBitrate: averageBitrate,
-        codecs: codecs,
-        metadata: metadata,
-        containerMimeType: containerMimeType,
-        sampleMimeType: sampleMimeType,
-        drmInitData: drmInitData,
-        subsampleOffsetUs: subsampleOffsetUs,
-        width: width,
-        height: height,
-        frameRate: frameRate,
-        channelCount: channelCount,
-        language: language,
-        accessibilityChannel: accessibilityChannel,
-      );
+    id: id,
+    label: label,
+    selectionFlags: selectionFlags,
+    roleFlags: roleFlags,
+    bitrate: bitrate,
+    averageBitrate: averageBitrate,
+    codecs: codecs,
+    metadata: metadata,
+    containerMimeType: containerMimeType,
+    sampleMimeType: sampleMimeType,
+    drmInitData: drmInitData,
+    subsampleOffsetUs: subsampleOffsetUs,
+    width: width,
+    height: height,
+    frameRate: frameRate,
+    channelCount: channelCount,
+    language: language,
+    accessibilityChannel: accessibilityChannel,
+  );
 }

@@ -3,12 +3,12 @@ import 'package:better_player_plus/src/video_player/video_player_platform_interf
 
 class MockVideoPlayerController extends VideoPlayerController {
   MockVideoPlayerController() : super(autoCreate: false) {
-    value = VideoPlayerValue(duration: const Duration());
+    value = VideoPlayerValue(duration: Duration.zero);
   }
 
   bool isLoopingState = false;
-  double volume = 0.0;
-  double speed = 1.0;
+  double volume = 0;
+  double speed = 1;
 
   @override
   Future<void> play() async {
