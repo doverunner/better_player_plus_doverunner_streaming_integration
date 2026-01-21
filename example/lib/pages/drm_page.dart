@@ -51,11 +51,7 @@ class _DrmPageState extends State<DrmPage> {
         drmType: BetterPlayerDrmType.fairplay,
         certificateUrl: Constants.DRMCertUrl,
         licenseUrl: Constants.DRMLicenseUrl,
-        headers: {
-          "pallycon-customdata-v2": Constants.DRMHlsAuthData,
-          "siteId": Constants.DRMSiteId
-        },
-      ),
+        headers: {"pallycon-customdata-v2": Constants.DRMHlsAuthData }),
     );
     _fairplayController.setupDataSource(fairplayDataSource);
 
@@ -89,7 +85,7 @@ class _DrmPageState extends State<DrmPage> {
           const SizedBox(height: 16),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text('Fairplay - certificate url based EZDRM. Works only for iOS.', style: TextStyle(fontSize: 16)),
+            child: Text('Fairplay - certificate url based DoveRunner. Works only for iOS.', style: TextStyle(fontSize: 16)),
           ),
           AspectRatio(
             aspectRatio: 16 / 9,

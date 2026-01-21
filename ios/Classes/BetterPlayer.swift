@@ -13,7 +13,7 @@ private var presentationSizeContext = 0
 
 public class BetterPlayer: NSObject, FlutterPlatformView, FlutterStreamHandler, AVPictureInPictureControllerDelegate {
     public private(set) var player: AVPlayer
-    public private(set) var loaderDelegate: BetterPlayerEzDrmAssetsLoaderDelegate?
+    public private(set) var loaderDelegate: BetterPlayerDoveRunnerDrmDelegate?
     public var eventChannel: FlutterEventChannel?
     public var eventSink: FlutterEventSink?
     public var preferredTransform: CGAffineTransform = .identity
@@ -152,11 +152,11 @@ public class BetterPlayer: NSObject, FlutterPlatformView, FlutterStreamHandler, 
     public func setDataSourceAsset(_ assetPath: String, key: String?, certificateUrl: String?, licenseUrl: String?, cacheKey: String?, cacheManager: CacheManager, overriddenDuration: Int) {
         if let path = Bundle.main.path(forResource: assetPath, ofType: nil) {
             let url = URL(fileURLWithPath: path)
-            setDataSourceURL(url, key: key, certificateUrl: certificateUrl, licenseUrl: licenseUrl, headers: [:], useCache: false, cacheKey: cacheKey, cacheManager: cacheManager, overriddenDuration: overriddenDuration, videoExtension: nil)
+            setDataSourceURL(url, key: key, certificateUrl: certificateUrl, licenseUrl: licenseUrl, drmHeader: [:], headers: [:], useCache: false, cacheKey: cacheKey, cacheManager: cacheManager, overriddenDuration: overriddenDuration, videoExtension: nil)
         }
     }
 
-    public func setDataSourceURL(_ url: URL, key: String?, certificateUrl: String?, licenseUrl: String?, headers: [AnyHashable: Any], useCache: Bool, cacheKey: String?, cacheManager: CacheManager, overriddenDuration: Int, videoExtension: String?) {
+    public func setDataSourceURL(_ url: URL, key: String?, certificateUrl: String?, licenseUrl: String?, drmHeader: [String:String], headers: [AnyHashable: Any], useCache: Bool, cacheKey: String?, cacheManager: CacheManager, overriddenDuration: Int, videoExtension: String?) {
         self.overriddenDuration = 0
         var finalHeaders = headers
         if finalHeaders["dummy"] == nil {} // keep dictionary type stable
@@ -172,7 +172,7 @@ public class BetterPlayer: NSObject, FlutterPlatformView, FlutterStreamHandler, 
                 let certURL = URL(string: certificateUrl)
                 let licURL = licenseUrl.flatMap { URL(string: $0) }
                 if let certURL = certURL {
-                    let delegate = BetterPlayerEzDrmAssetsLoaderDelegate(certURL, withLicenseURL: licURL)
+                    let delegate = BetterPlayerDoveRunnerDrmDelegate(certURL, withLicenseURL: licURL, licenseHeaders: drmHeader)
                     self.loaderDelegate = delegate
                     let qos = DispatchQoS.QoSClass.default
                     let streamQueue = DispatchQueue(label: "streamQueue", qos: DispatchQoS(qosClass: qos, relativePriority: -1), attributes: [])

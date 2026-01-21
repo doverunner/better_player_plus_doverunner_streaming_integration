@@ -230,6 +230,7 @@ extension SwiftBetterPlayerPlugin {
             let certificateUrl = dataSource["certificateUrl"] as? String
             let licenseUrl = dataSource["licenseUrl"] as? String
             let headers = dataSource["headers"] as? [String: Any] ?? [:]
+            let drmHeaders = dataSource["drmHeaders"] as? [String: String] ?? [:]
             let cacheKey = dataSource["cacheKey"] as? String
             let maxCacheSize = dataSource["maxCacheSize"] as? NSNumber
             let videoExtension = dataSource["videoExtension"] as? String
@@ -247,7 +248,7 @@ extension SwiftBetterPlayerPlugin {
                 }
                 player.setDataSourceAsset(assetPath, key: key, certificateUrl: certificateUrl, licenseUrl: licenseUrl, cacheKey: cacheKey, cacheManager: cacheManager, overriddenDuration: overriddenDuration)
             } else if let uriArg = uriArg, let url = URL(string: uriArg) {
-                player.setDataSourceURL(url, key: key, certificateUrl: certificateUrl, licenseUrl: licenseUrl, headers: headers, useCache: useCache, cacheKey: cacheKey, cacheManager: cacheManager, overriddenDuration: overriddenDuration, videoExtension: videoExtension)
+                player.setDataSourceURL(url, key: key, certificateUrl: certificateUrl, licenseUrl: licenseUrl, drmHeader: drmHeaders, headers: headers, useCache: useCache, cacheKey: cacheKey, cacheManager: cacheManager, overriddenDuration: overriddenDuration, videoExtension: videoExtension)
             } else {
                 result(FlutterMethodNotImplemented)
                 return
